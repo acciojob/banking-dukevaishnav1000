@@ -1,5 +1,7 @@
 package com.driver;
 
+import java.util.Arrays;
+
 public class BankAccount {
 
     private String name;
@@ -12,12 +14,46 @@ public class BankAccount {
     this.minBalance=minBalance;
     }
 
-    public String generateAccountNumber(int digits, int sum) throws Exception{
+    public String generateAccountNumber(int digits, int sum) throws Exception {
         //Each digit of an account number can lie between 0 and 9 (both inclusive)
         //Generate account number having given number of 'digits' such that the sum of digits is equal to 'sum'
         //If it is not possible, throw "Account Number can not be generated" exception
+        if (sum >= 0 && digits > 0)
+        {  String temp="";
+            int arr[]=new int[digits];
+            if (sum <= 9) {
+                arr[arr.length-1]=sum;
+                return Arrays.toString(arr);
+            }
+         else {
+                int sumNow=9;
+                arr[digits-1]=9;
+                int count=digits-2;
+                int diff=sum;
+                while(sumNow<sum && arr[0]!=9)
+                {       diff=sum-sumNow;
+                    if(diff>9)
+                    {
+                        arr[count]=9;
+                        count--;
+                        sumNow+=9;
+                    }
+                    else
+                    {
+                        arr[count]=diff;
+                        sumNow+=diff;
+                        break;
+                    }
+                }
+                if(sum>sumNow)
+                    throw new Exception("Account Number can not be generated");
+                else
+                    return Arrays.toString(arr);
+        }
+    }
+    else
+        throw new Exception("Account Number can not be generated");
 
-        return null;
     }
 
     public void deposit(double amount) {
@@ -30,12 +66,8 @@ public class BankAccount {
         if(amount<=balance-minBalance)
             this.balance-=amount;
         else
-            try{
                 throw new Exception("Insufficient Balance");
-            }
-            catch(Exception e){
-                System.out.println(e);
-            }
+
     }
 
     public String getName() {
